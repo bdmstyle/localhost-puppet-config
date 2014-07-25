@@ -20,6 +20,11 @@ ensure => installed,
 require => Exec["apt-update"],
 }
 
+package { "curl":
+ensure => installed,
+require => Exec["apt-update"],
+}
+
 package { "ack-grep":
 ensure => installed,
 require => Exec["apt-update"],

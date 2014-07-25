@@ -55,6 +55,11 @@ ensure => installed,
 require => Exec["apt-update"],
 }
 
+package { "curl":
+ensure => installed,
+require => Exec["apt-update"],
+}
+
 package { "mongodb":
 ensure => installed,
 require => Exec["apt-update"],
