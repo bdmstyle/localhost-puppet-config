@@ -1,0 +1,79 @@
+# check if the current branch has changes pick a color
+function parse_git_dirty {
+    if [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]]; then
+        echo -e "\033[01;31m"
+    else
+        echo -e "\033[01;33m"
+    fi
+}
+ 
+# get the current branch
+function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1]/"
+}
+ 
+# get the current tag
+function parse_git_tag() {
+    git describe --tags 2> /dev/null
+}
+ 
+# check if we are on a branch or tag and echo the ouput
+function parse_git_branch_or_tag() {
+    local OUT="$(parse_git_branch)"
+    if [ "$OUT" == "[(no branch)]" ]; then
+        OUT="($(parse_git_tag))";
+    fi
+    echo $(parse_git_dirty)$OUT" "
+}
+PS1='\[\033[01;32m\]\h $(parse_git_branch_or_tag)\[\033[01;34m\]\w \[\033[00m\]$ '
+
+#variables
+#export JAVA_HOME=/home/bruno/dev/softwares/jdk1.8.0_05
+#export JAVA_HOME=/home/bruno/dev/softwares/jdk1.7.0_60
+#export M2_HOME=/home/bruno/dev/softwares/apache-maven-3.2.1
+#export MAVEN_OPTS="-Xms256m -Xmx2048m -XX:PermSize=256m  -XX:MaxPermSize=1048m"
+#export PATH=$M2_HOME/bin:$JAVA_HOME/bin:$PATH
+#export SVN_EDITOR=vim
+
+############################################################################
+#equivalente ao comando tail porem mostra logs com cores
+############################################################################
+function ctail() {
+tail $@ | colorlog;
+  }
+
+  ############################################################################
+  #Colore a saida do print do log
+  ############################################################################
+  function colorlog() {
+  awk '/DEBUG/ {print "\033[36;1m "$0" \033[m "; next} #Branco
+  /INFO/ {print "\033[30;1m "$0" \033[m "; next} #Cinza
+  /WARN/ {print "\033[33;1m "$0" \033[m "; next} #Amarelo
+  /ERROR/ {print "\033[31;1m "$0" \033[m "; next} #Vermelho
+  /Exception.*/ {print "\033[31;1m "$0" \033[m "; next} #Vermelho
+  /at.*/ {print "\033[31;1m "$0" \033[m "; next} #Vermelho
+  1 {print $0 }';
+}
+
+#general
+#alias resetRabbit='sudo rabbitmqctl stop_app && sudo rabbitmqctl reset && sudo rabbitmqctl start_app && sudo rabbitmqctl add_vhost upbc && #sudo rabbitmqctl add_user rotterdam rotterdam  && sudo rabbitmqctl set_permissions -p upbc rotterdam  ".*" ".*" ".*" && sudo rabbitmqctl set_permissions -p upbc guest  ".*" ".*" ".*"'
+#alias rabbit='sudo rabbitmq-server &'
+#alias ignore='svn propedit svn:ignore'
+#alias sql='unset GNOME_DESKTOP_SESSION_ID;/home/bruno/dev/softwares/sqldeveloper/sqldeveloper.sh'
+
+alias psx='ps aux | grep '
+alias config='vim ~/.bashrc'
+alias dev='cd /home/bruno/dev/'
+alias reload='source ~/.bashrc'
+alias open='gnome-open'
+
+
+alias server='ssh -p443 bdmstyle@216.224.186.46'
+alias hosts='sudo vim /etc/hosts'
+#alias lo='sudo cp /home/bruno/dev/hosts/local /etc/hosts'
+
+#logs
+#alias lbe='ctail -500f /export/logs/upbc-service-be/upbc-service-be.log'
+
+
+
