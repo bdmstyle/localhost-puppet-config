@@ -2,12 +2,10 @@ exec { "apt-update":
 command => "/usr/bin/apt-get update"
 }
 
-package { "ruby":
-ensure => installed,
-require => Exec["apt-update"],
-}
+include oraclejdk8
+oraclejdk8::install{oraclejdk8-local:}
 
-package { "postgresql":
+package { "ruby":
 ensure => installed,
 require => Exec["apt-update"],
 }
@@ -42,12 +40,7 @@ ensure => installed,
 require => Exec["apt-update"],
 }
 
-package { "postgresql":
-ensure => installed,
-require => Exec["apt-update"],
-}
-
-package { "libssl0.9.8":
+package { "skype":
 ensure => installed,
 require => Exec["apt-update"],
 }
@@ -75,6 +68,11 @@ require => Exec["apt-update"],
 package { 'sass':
     ensure   => 'installed',
     provider => 'gem',
+}
+
+package { "gnome-panel":
+ensure => installed,
+require => Exec["apt-update"],
 }
 
 package { "terminator":
