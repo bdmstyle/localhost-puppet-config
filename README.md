@@ -1,4 +1,4 @@
 puppet-localhost
 ================
 
-My machine automatic configuration
+.My machine automatic configuration
